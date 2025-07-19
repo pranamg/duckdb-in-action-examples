@@ -1,0 +1,54 @@
+
+# Start DuckDB CLI
+duckdb
+
+# Check DuckDB version
+./duckdb -version
+
+# Start DuckDB CLI from local binary
+./duckdb
+
+# Show help in DuckDB CLI
+.help
+
+# Run a simple SQL query
+select v.* from values (1), (3), (3), (7) as v;
+
+# List tables
+.tables
+
+# Exit DuckDB CLI
+.exit
+
+# Run DuckDB CLI with JSON output
+./duckdb --json 'select v.* values (1), (3), (3), (7) as v;'
+duckdb --json -c 'select v.* from values (1),(3),(3),(7) as v;'
+duckdb --line -c 'select v.* from values (1),(3),(3),(7) as v;'
+
+# Describe DuckDB extensions
+DESCRIBE SELECT * FROM duckdb_extensions();
+SELECT extension_name, loaded, installed FROM duckdb_extensions() ORDER BY installed DESC, loaded DESC;
+
+# Install and load httpfs extension
+INSTALL httpfs;
+LOAD httpfs;
+FROM duckdb_extensions() SELECT loaded, installed, install_path WHERE extension_name = 'httpfs';
+
+# Count rows in remote CSV files
+SELECT count(*) FROM 'https://github.com/bnokoro/Data-Science/raw/master/countries%20of%20the%20world.csv';
+SELECT count(*) FROM 'https://bit.ly/3KoiZR0';
+SELECT count(*) FROM read_csv_auto("https://bit.ly/3KoiZR0");
+
+# Change output mode and preview data
+.mode line
+SELECT * FROM read_csv_auto("https://bit.ly/3KoiZR0") LIMIT 1;
+.mode duckbox
+SELECT count(*) AS countries, max(Population) AS max_population, round(avg(cast("Area (sq. mi.)" AS decimal))) AS avgArea FROM read_csv_auto("https://bit.ly/3KoiZR0");
+.mode csv
+SELECT Country, Population, Birthrate, Deathrate FROM read_csv_auto('https://bit.ly/3KoiZR0') WHERE trim(region) = 'WESTERN EUROPE';
+.exit
+
+# Export results to CSV and Parquet
+duckdb -csv -s "SELECT Country, Population, Birthrate, Deathrate FROM read_csv_auto('https://bit.ly/3KoiZR0') WHERE trim(region) = 'WESTERN EUROPE'" > western_europe.csv
+duckdb -s "COPY (SELECT Country, Population, Birthrate, Deathrate FROM read_csv_auto('https://bit.ly/3KoiZR0') WHERE trim(region) = 'WESTERN EUROPE') TO 'western_europe.parquet' (FORMAT PARQUET)"
+duckdb -s "FROM 'western_europe.parquet' LIMIT 5"
