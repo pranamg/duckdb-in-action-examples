@@ -11,9 +11,24 @@ You won’t need to read through pages of documentation—you’ll learn as you 
 From there, you’ll explore the different ways you can analyze data with DuckDB, including advanced aggregation and analysis, data without persistence, and DuckDB’s underlying architecture. Learn how to combine DuckDB with the Python ecosystem for even greater customization, and how to extend DuckDB with its own tools. 
 You’ll take to DuckDB like a duck to water, rapidly solving almost any relational data task with zero friction.
 
-[MotherDuck](https://motherduck.com) endorses this book, even giving away free copies:
+## DuckDB CLI Installation (Linux)
 
-[![Cover](./img/md_free_book.png)](https://motherduck.com/duckdb-book/)
+To install the DuckDB CLI on Linux:
+
+```bash
+wget https://github.com/duckdb/duckdb/releases/download/v1.3.2/duckdb_cli-linux-amd64.zip
+unzip duckdb_cli-linux-amd64.zip
+chmod +x duckdb
+./duckdb -version
+sudo mv ./duckdb /usr/local/bin/
+```
+Then you can run:
+
+```bash
+duckdb
+```
+
+**Note:** Don't forget to update this link to the latest version from the GitHub releases page: https://github.com/duckdb/duckdb/releases
 
 ## About the authors
 
